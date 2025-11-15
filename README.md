@@ -27,11 +27,17 @@ This will output the parsed partition table, as well as the command need to extr
 
 ## Updating the firmware using the official API (ADVANCED)
 
+
 The official XTEINK API pulls the firmware from:
 <http://gotaserver.xteink.com/api/download/ESP32C3/V3.0.[version_number]/V3.0.[version_number]-EN.bin>
 
 For example, V3.0.7 gets the firmware from:
 <http://gotaserver.xteink.com/api/download/ESP32C3/V3.0.7/V3.0.7-EN.bin>
+
+One can query the server to see if a firmware update is available via:
+<http://gotaserver.xteink.com/api/check-update?current_version=V3.0.1&device_type=ESP32C3&device_id=1111> (either use curl or navigate to this address in web browser)
+This will tell the user what the latest version is under the `version:` field in the result, and will also provide the download url to get this version under the `download_url field`
+\* Credit to u/daveallie on reddit for his post analyzing this behavior: <https://www.reddit.com/r/xteinkereader/comments/1oq2dg1/chinese_to_english_firmware_transition/>
 
 Using the partition table offsets from earlier, if we do: 
 `dd if=firmware_pull.bin of=app0.bin bs=1 skip=$((0x10000)) count=$((0x640000))`
@@ -173,7 +179,7 @@ This shows that we have the same bytes in the api firmware download as in the fi
 To thoroughly confirm that they are the exact same, we can use dd to copy the bytes up to where the data is unused by the firmware pull:
 `dd if=firmware_pull.bin of=app0.bin bs=1 skip=$((0x10000)) count=$((0x60d7a0))`, where 0x60d7a0 is the end of the data from the official api firmware pull, and also where our own firmware pull simply contains unused 0xFF bytes to fill in the unused memory.
 
-Then we can check to see if the files differ using `diff app0.bin V3.0.7-EN.bin`, which should not output anything if they are the same. If they are different, we will see: `Binary files app0.bin and V3.0.7-EN.bin differ`
+Then we can check to see if the files differ using `diff app0.bin V3.0.7-EN.bin`, which should not output anything if they are the same. If they are different, we will see: `Binary files app0.bin and V3.0.7-EN.bin differ`. For our example device, which is also on V3.0.7, they are the same.
 
 Therefore, if we want to simply do an update without overwriting the bootloader or other partitions, we can simply overwrite the firmware at the offset of app0 with the new version fetched from the official API endpoint:
 `sudo esptool --port /dev/ttyACM0 write-flash 0x10000 V3.0.7-EN.bin` , where `0x10000` is the offset of app0 from the parsed partition table. This is also much faster, since less data is being flashed to the device.
