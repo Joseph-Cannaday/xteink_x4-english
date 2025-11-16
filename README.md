@@ -186,7 +186,7 @@ Then we can check to see if the files differ using `diff app0.bin V3.0.7-EN.bin`
 Therefore, if we want to simply do an update without overwriting the bootloader or other partitions, we can simply overwrite the firmware at the offset of app0 with the new version fetched from the official API endpoint:
 `sudo esptool --port /dev/ttyACM0 write-flash 0x10000 V3.0.7-EN.bin` , where `0x10000` is the offset of app0 from the parsed partition table. This is also much faster, since less data is being flashed to the device.
 
-###BUG
+### BUG
 
 Updating the app this way should update your system, but it seems the version number printed in the "Sync" menu will still show the old version. I may look into this more to see if I can find where this version number is pulled from.
 
