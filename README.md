@@ -37,7 +37,9 @@ For example, V3.0.7 gets the firmware from:
 One can query the server to see if a firmware update is available via:
 <http://gotaserver.xteink.com/api/check-update?current_version=V3.0.1&device_type=ESP32C3&device_id=1111> (either use curl or navigate to this address in web browser)
 This will tell the user what the latest version is under the `version:` field in the result, and will also provide the download url to get this version under the `download_url field`
+Technically the `device_id` field should be passing in your specific device's id (can be found by connecting to the devices hotspot: Sync -> More Transfer Options, then clicking "About" on the hotspot webpage)
 
+Firmware updates and file management can also be done here.
 
 \* Credit to u/daveallie on reddit for his post analyzing this behavior: <https://www.reddit.com/r/xteinkereader/comments/1oq2dg1/chinese_to_english_firmware_transition/>
 
