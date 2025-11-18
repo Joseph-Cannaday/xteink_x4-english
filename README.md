@@ -27,6 +27,8 @@ This will output the parsed partition table, as well as the command need to extr
 
 ## Updating the firmware using the official API (ADVANCED)
 
+I have written a script to automate the api calls described below:
+`usage: python3 update_checker.py [-h] [-i ID] [-t DEVICE_TYPE] [-v VERSION]`
 
 The official XTEINK API pulls the firmware from:
 <http://gotaserver.xteink.com/api/download/ESP32C3/V3.0.[version_number]/V3.0.[version_number]-EN.bin>
@@ -50,7 +52,7 @@ Using the partition table offsets from earlier, if we do:
 Noting that unused memory is filled with 0xFF bytes, we can do:
 
 ```
-hexdump -C V3.0.7-EN.bin|tail -n 60                                                                                                                                                                                                               ✔  17:50:46 
+hexdump -C V3.0.7-EN.bin|tail -n 60                                                                                                                                                                                                         
 0060d3f0  06 ce ef f0 1f ee 09 e5  b2 47 91 83 91 8b 1c c0  |.........G......|
 0060d400  f2 40 62 44 05 61 82 80  c1 81 93 07 20 0c 63 9a  |.@bD.a...... .c.|
 0060d410  f5 00 18 49 bd 47 13 05  50 10 63 e6 e7 00 01 45  |...I.G..P.c....E|
@@ -116,7 +118,7 @@ hexdump -C V3.0.7-EN.bin|tail -n 60                                             
 and 
 
 ```
-hexdump -C app0.bin|tail -n 60                                                                                                                                                                                                             PIPE|0 ✔  17:50:30 
+hexdump -C app0.bin|tail -n 60                                                                                                                                                                                                             
 0060d410  f5 00 18 49 bd 47 13 05  50 10 63 e6 e7 00 01 45  |...I.G..P.c....E|
 0060d420  82 80 13 05 50 10 82 80  01 45 82 80 13 d7 05 01  |....P....E......|
 0060d430  93 07 d0 0c 13 05 50 10  63 1a f7 00 c1 67 93 87  |......P.c....g..|
