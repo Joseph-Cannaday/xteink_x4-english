@@ -197,3 +197,13 @@ Therefore, if we want to simply do an update without overwriting the bootloader 
 
 This is also much faster than a full firmware flash, since less data is being flashed to the device. It is also typically much faster than syncing updates on the device itself. Optionally, to replace the backup image on app0 with a different version, one can do the same command, but using the app0.bin offset instead. For stability, it may make sense to use one version previous than the latest (as the device normally would do), though this can technically be any version. I would recommend downloading a fresh version from the api as demonstrated above, as it won't have the cached data that you would have if you copied your app1 partition to app0.
 
+This also comes with the added benefit of alleviating security concerns associated with the insecure protocol the device uses to fetch updates from the server (and prevents storing you wifi password in plaintext in the device memory).
+
+### Character Glyphs
+
+I have found character glyphs in the V3.0.7-EN.bin at around `0x483c0`. I started by looking at 8 by slices for 8x8 character glyphs. What I found was that the glyphs are not exactly 8x8 each, but run into each other a bit. However, if the height is set to 8 bits so each row represents a rendered character slice, one can render a large number of characters around this offset(possibly the utf-8 set).
+
+I had claude-code write a script that renders these binary bitmaps as a single image:
+
+`python3 alpha.py -f app0.bin --offset 0x483ec0 --count 1200 -o font_alpha.png -s 8`, where app0.bin is V3.0.7-EN.bin
+
